@@ -118,7 +118,8 @@ for momentum_window in [120, 252, 378, 504]:
                                 for s in tickers_gr:
                                     if s in allocation:
                                         new_port_value = new_port_value + \
-                                            allocation.get(s)*latest_prices.get(s)
+                                            allocation.get(
+                                                s)*latest_prices.get(s)
                                         # print('Sell ',s,'stocks: ',allocation.get(s),' bought for ',df_buy['price'][s],' sold for ',latest_prices.get(s)
                                         #       ,' for total:{0:.2f} and a gain of :{1:.2f}'.format(allocation.get(s)*latest_prices.get(s),
                                         #      (latest_prices.get(s)-df_buy['price'][s])*allocation.get(s)))
@@ -130,14 +131,15 @@ for momentum_window in [120, 252, 378, 504]:
                                 pval = pval.append({'Date': df_date,
                                                     'portvalue': round(port_value, 2),
                                                     'porteff': round(eff*100, 2)},
-                                                    ignore_index=True)
+                                                   ignore_index=True)
                                 port_value = port_value+added_value  # add 200 after each trading period
                         df_m = pd.DataFrame()
                         m_s = []
                         st = []
                         for s in tickers_gr:
                             st.append(s)
-                            m_s.append(momentum_score(df_tr[s].tail(momentum_window)))
+                            m_s.append(momentum_score(
+                                df_tr[s].tail(momentum_window)))
                         df_m['stock'] = st
                         df_m['momentum'] = m_s
                         dev = df_m['momentum'].std()
@@ -198,7 +200,7 @@ for momentum_window in [120, 252, 378, 504]:
                                                     'shares': 0,
                                                     'price': 0,
                                                     'value': round(port_value-df_buy['value'].sum(), 2)},
-                                                    ignore_index=True)
+                                                   ignore_index=True)
                             df_buy = df_buy.set_index('stock')
                             #print('Buy date',df_date)
                             # print(df_buy)
@@ -248,7 +250,7 @@ portfolio_size = int(best_res.loc[0, 'portfolio_size'])
 cutoff = best_res.loc[0, 'cutoff']
 tr_period = int(best_res.loc[0, 'tr_period'])
 # how much cash to add each trading period
-added_value = tr_period*0  # how much cash to add each trading period
+added_value = tr_period*10  # how much cash to add each trading period
 no_tr = 1  # number of trades performed
 allocation = {}
 non_trading_cash = 0
@@ -284,7 +286,7 @@ for days in range(dataset, len(df), tr_period):
             pval = pval.append({'Date': df_date,
                                 'portvalue': round(port_value, 2),
                                 'porteff': round(eff*100, 2)},
-                                ignore_index=True)
+                               ignore_index=True)
             port_value = port_value+added_value  # add 200 after each trading period
 
     df_m = pd.DataFrame()
@@ -473,7 +475,7 @@ df_buy = df_buy.append({'stock': 'CASH',
                         'shares': 0,
                         'price': 0,
                         'value': round(port_value-df_buy['value'].sum(), 2)},
-                        ignore_index=True)
+                       ignore_index=True)
 df_buy = df_buy.set_index('stock')
 print('Buy date', df_t.index[-1])
 print(df_buy)
