@@ -85,7 +85,7 @@ df_bt = df.head(x)  # backtest dataframe of first x values from total prices
 # validate dataframe of the rest prices like a forward test
 df_vld = df.tail(x)
 # run all the combinations for all parameter values
-for backtest_days in [200]:
+for backtest_days in [100]:
     for momentum_window in range(200, 510, 50):
         for minimum_momentum in range(90, 210, 30):
             for portfolio_size in [5, 10, 15, 20]:

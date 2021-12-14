@@ -12,11 +12,11 @@ import pandas as pd
 import numpy as np
 from scipy import stats
 import requests as req
+import matplotlib.pyplot as plt
 from pypfopt.efficient_frontier import EfficientFrontier
 from pypfopt.discrete_allocation import DiscreteAllocation
 from pypfopt.risk_models import CovarianceShrinkage
 from stock_tickers import tickers_gr
-import matplotlib.pyplot as plt
 
 
 def get_greekstocks_data(tickers):
@@ -162,11 +162,11 @@ def clean_weights(weights, cutoff=1e-3, rounding=3):
     return cleaned_weights
 
 
-def momentum_score(ts):
+def momentum_score(ts_):
     ''' Momentum score function. This is a long only indicator based on the annualized \
         slope of the price'''
-    x = np.arange(len(ts))
-    log_ts = np.log(ts)
+    x = np.arange(len(ts_))
+    log_ts = np.log(ts_)
     regress = stats.linregress(x, log_ts)
     annualized_slope = (np.power(np.exp(regress[0]), 252) - 1) * 100
     return annualized_slope * (regress[2] ** 2)
@@ -179,7 +179,7 @@ def select_columns(data_frame, column_names):
 
 
 def get_portfolio(universe, df_tr, port_value, cutoff, df_m):
-    '''create a portfolio using the stocks from the universe and the closing 
+    '''create a portfolio using the stocks from the universe and the closing
     prices from df_tr with a given portfolio value and a weight cutoff value
     using the value of a momemntum indicator to limit the quantity of the stocks'''
     df_t = select_columns(df_tr, universe)
