@@ -234,6 +234,7 @@ def backtest_portfolio(prices_df, bt_dataset=800, lookback_days=700, momentum_wi
     added_value = tr_period*a_v
     no_tr = 0  # number of trades performed
     init_portvalue = port_value
+    eff = 1
     plotted_portval = []
     plotted_ret = []
     pval = pd.DataFrame(columns=['Date', 'portvalue', 'porteff'])
@@ -246,7 +247,7 @@ def backtest_portfolio(prices_df, bt_dataset=800, lookback_days=700, momentum_wi
         if days <= bt_dataset:
             ini_date = df_date
             plotted_portval.append(round(port_value, 2))
-            plotted_ret.append(round(0, 2))
+            plotted_ret.append(round(100*eff, 2))
             pval = pval.append({'Date': df_date, 'portvalue': round(
                 init_portvalue, 2), 'porteff': round(0, 2)}, ignore_index=True)
         elif days > bt_dataset and keep_df_buy is False:
@@ -298,13 +299,17 @@ def backtest_portfolio(prices_df, bt_dataset=800, lookback_days=700, momentum_wi
     total_ret = 100*(new_port_value/(init_portvalue+no_tr*added_value)-1)
     tot_contr = init_portvalue+no_tr*added_value
     s = round(pd.DataFrame(plotted_portval).pct_change().add(1).cumprod()*100, 2)
-    rs = {'trades': no_tr, 'momentum_window': momentum_window,
+    rs = {'trades': no_tr,
+          'momentum_window': momentum_window,
           'minimum_momentum': minimum_momentum,
           'portfolio_size': portfolio_size,
           'tr_period': tr_period,
           'cutoff': cutoff,
-          'tot_contribution': tot_contr, 'final port_value': new_port_value,
-          'cumprod': s[-1:][0].values[0], 'tot_ret': total_ret, 'drawdown': s.diff().min()[0]}
+          'tot_contribution': tot_contr,
+          'final port_value': new_port_value,
+          'cumprod': s[-1:][0].values[0],
+          'tot_ret': total_ret,
+          'drawdown': s.diff().min()[0]}
     return rs
 
 
@@ -316,6 +321,7 @@ def backtest_portfolio2(prices_df, bt_dataset=800, lookback_days=700, momentum_w
     added_value = tr_period*a_v
     no_tr = 0  # number of trades performed
     init_portvalue = port_value
+    eff = 1
     plotted_portval = []
     plotted_ret = []
     pval = pd.DataFrame(columns=['Date', 'portvalue', 'porteff'])
@@ -329,7 +335,7 @@ def backtest_portfolio2(prices_df, bt_dataset=800, lookback_days=700, momentum_w
         if days <= bt_dataset:
             ini_date = df_date
             plotted_portval.append(round(port_value, 2))
-            plotted_ret.append(round(0, 2))
+            plotted_ret.append(round(100*eff, 2))
             pval = pval.append({'Date': df_date, 'portvalue': round(
                 init_portvalue, 2), 'porteff': round(0, 2)}, ignore_index=True)
         elif days > bt_dataset and keep_df_buy is False:
@@ -383,7 +389,7 @@ def backtest_portfolio2(prices_df, bt_dataset=800, lookback_days=700, momentum_w
             no_tr = no_tr+1
         else:
             print('Buy date', df_date,
-                  'Not enough stocks in universe to create portfolio', port_value)
+                  'Not enough money to create portfolio', port_value)
             port_value = port_value+added_value
             plotted_portval.append(round(port_value, 2))
             plotted_ret.append(round(100*eff, 2))
@@ -399,13 +405,17 @@ def backtest_portfolio2(prices_df, bt_dataset=800, lookback_days=700, momentum_w
     print('total capital:', init_portvalue+no_tr*added_value, new_port_value)
     tot_contr = init_portvalue+no_tr*added_value
     s = round(pd.DataFrame(plotted_portval).pct_change().add(1).cumprod()*100, 2)
-    rs = {'trades': no_tr, 'momentum_window': momentum_window,
+    rs = {'trades': no_tr,
+          'momentum_window': momentum_window,
           'minimum_momentum': minimum_momentum,
           'portfolio_size': portfolio_size,
           'tr_period': tr_period,
           'cutoff': cutoff,
-          'tot_contribution': tot_contr, 'final port_value': new_port_value,
-          'cumprod': s[-1:][0].values[0], 'tot_ret': total_ret, 'drawdown': s.diff().min()[0]}
+          'tot_contribution': tot_contr,
+          'final port_value': new_port_value,
+          'cumprod': s[-1:][0].values[0],
+          'tot_ret': total_ret,
+          'drawdown': s.diff().min()[0]}
     plt.plot(plotted_portval)
     plt.title('Portfolio Value history')
     plt.xlabel('Trades')

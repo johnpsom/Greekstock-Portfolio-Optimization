@@ -77,7 +77,7 @@ df = close_data
 backtest_results = pd.DataFrame(columns=['trades', 'momentum_window',
                                          'minimum_momentum', 'portfolio_size',
                                          'tr_period', 'cutoff',
-                                         'tot_contribution', 'final portfolio_value',
+                                         'tot_contribution', 'final port_value',
                                          'cumprod', 'tot_ret', 'drawdown'])
 # backtest on the 90% of our dataset
 x = int(0.9*l_close_min)
@@ -107,7 +107,6 @@ for backtest_days in [200]:
                         print(backtest_results.sort_values(
                             by=['tot_ret']).tail(2))
 print(backtest_results.sort_values(by=['tot_ret']).tail(10))
-
 best_backtest_result = backtest_results.sort_values(
     by=['tot_ret']).tail(1).reset_index(drop=True)
 print(best_backtest_result)
