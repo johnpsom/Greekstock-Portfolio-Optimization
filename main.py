@@ -3,13 +3,34 @@
 Created on Thu Dec  2 13:42:37 2021
 
 @author: IOANNIS PSOMIADIS
+
+ΠΡΟΣΟΧΗ ότι βλέπετε εδώ είναι φτιαγμένο για ενημερωτικούς και εκπαιδευτικούς
+σκοπούς μόνο και σε καμιά περίπτωση δεν αποτελεί επενδυτική ή άλλου είδους πρόταση.
+Οι επενδύσεις σε μετοχές ενέχουν οικονομικό ρίσκο και ο δημιουργός της εφαρμογής
+δεν φέρει καμιά ευθύνη σε περίπτωση απώλειας περιουσίας.
+Μπορείτε να επικοινωνείτε τα σχόλια και παρατηρήσεις σας
+στο email: getyour.portfolio@gmail.com .
+
+Υπολογισμός βέλτιστου χαρτοφυλακίου από 100+ επιλεγμένες μετοχές του ΧΑ,
+βασισμένος στις αρχές της Σύγχρονης Θεωρίας Χαρτοφυλακίου.
+Στόχος είναι να αυτοματοποιηθεί όλη η διαδικασία με βάση την στρατηγική που
+περιγράφεται παρακάτω.
+
+Η εφαρμογή χρησιμοποιεί ιστορικές τιμές για όλες τις μετοχές της παραπάνω λίστας.
+Οι επιπλεόν παράμετροι της στρατηγικής μας είναι
+- ένας τεχνικός δείκτης momentum για να βρίσκει ποιές από αυτές έχουν δυναμική για άνοδο της τιμής τους
+- το μέγιστο πλήθος μετοχών που θέλουμε να έχουμε στο χαρτοφυλάκιό μας (π.χ. 5, 10 ΄ή 15 μετοχές)
+- το ελάχιστο ποσοστό συμμετοχής της κάθε μετοχής στο επιλεγμένο χαρτοφυλάκιο. (π.χ 5% ή 10%)
+- το χρονικό διάστημα διακράτησης του προτεινόμενου χαρτοφυλακίου σε ημέρες (π.χ. 5, 10 ή 20 μέρες)
+
+Η στρατηγική μας είναι αφού δοκιμάσουμε όλους τους συνδυασμούς των παραπάνω
+παραμέτρων στο παρελθόν με χρήση των ιστορικών τιμών όλων των μετοχών να επιλέγουμε
+κάθε φορά τον καλύτερο συνδυασμό και μετά να δημιουργούμε το χαρτοφυλάκιό μας,
+ελπίζοντας ότι η δυναμική αυτή θα είναι σε ισχύ για κάποιο χρονικό διάστημα ακόμη.
 """
 
 import warnings
-from datetime import datetime
 import pandas as pd
-import matplotlib.pyplot as plt
-
 import greekstocks
 from stock_tickers import tickers_gr
 
@@ -17,28 +38,6 @@ pd.set_option('display.max_rows', 1000)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 warnings.filterwarnings("ignore")
-
-    
-'''
-ΠΡΟΣΟΧΗ ότι βλέπετε εδώ είναι φτιαγμένο για ενημερωτικούς και εκπαιδευτικούς σκοπούς μόνο και σε καμιά περίπτωση δεν αποτελεί επενδυτική
-ή άλλου είδους πρόταση.Οι επενδύσεις σε μετοχές ενέχουν οικονομικό ρίσκο και ο δημιουργός της εφαρμογής δεν φέρει καμιά ευθύνη σε περίπτωση
-απώλειας περιουσίας. Μπορείτε να επικοινωνείτε τα σχόλια και παρατηρήσεις σας στο email: getyour.portfolio@gmail.com .
-Στον πίνακα που ακολουθεί φαίνονται αρχικά τα σύμβολα των μετοχών με τις τελευταίες ημερήσιες τιμές κλεισίματός τους.
-Οι μετοχές που έχουν αρχικά επιλεγεί είναι οι παρακάτω που βλέπουμε στον πίνακα των τιμών κλεισίματος τους.
-
-Υπολογισμός βέλτιστου χαρτοφυλακίου από 100+ επιλεγμένες μετοχές του ΧΑ, βασισμένος στις αρχές της Σύγχρονης Θεωρίας Χαρτοφυλακίου.
-Στόχος είναι να αυτοματοποιηθεί όλη η διαδικασία με βάση την στρατηγική που περιγράφεται παρακάτω.
-
-Η εφαρμογή χρησιμοποιεί ιστορικές τιμές για όλες τις μετοχές της παραπάνω λίστας. Οι επιπλεόν παράμετροι της στρατηγικής μας είναι
-- ένας τεχνικός δείκτης momentum για να βρίσκει ποιές από αυτές έχουν δυναμική για άνοδο της τιμής τους
-- το μέγιστο πλήθος μετοχών που θέλουμε να έχουμε στο χαρτοφυλάκιό μας (π.χ. 5, 10 ΄ή 15 μετοχές)
-- το ελάχιστο ποσοστό συμμετοχής της κάθε μετοχής στο επιλεγμένο χαρτοφυλάκιο. (π.χ 5% ή 10%)
-- το χρονικό διάστημα διακράτησης του προτεινόμενου χαρτοφυλακίου σε ημέρες (π.χ. 5, 10 ή 20 μέρες)
-
-Η στρατηγική μας είναι αφού δοκιμάσουμε όλους τους συνδυασμούς των παραπάνω παραμέτρων στο παρελθόν με χρήση των ιστορικών τιμών όλων 
-των μετοχών να επιλέγουμε κάθε φορά τον καλύτερο συνδυασμό και μετά να δημιουργούμε το χαρτοφυλάκιό μας, ελπίζοντας ότι η δυναμική αυτή θα
-είναι σε ισχύ για κάποιο χρονικό διάστημα ακόμη.
-'''
 
 #get all greek stock tickers OHLC price data
 greekstocks_data=greekstocks.get_greekstocks_data(tickers_gr)
@@ -64,8 +63,8 @@ l_close_min=l_close['len_prices'].min()
 
 
 #Declare Constants
-port_value=10000
-new_port_value=0
+portfolio_value=10000
+new_portfolio_value=0
 df=close_data
 #momentum_window = v
 #minimum_momentum = 70
@@ -75,12 +74,14 @@ df=close_data
 #tr_period=21 #trading period, 21 is a month,10 in a fortnite, 5 is a week, 1 is everyday
 #dataset=800 #start for length of days used for the optimising dataset
 #l_days=600  #how many days to use in optimisations
-backtest_results=pd.DataFrame(columns=['trades', 'momentum_window', 'minimum_momentum', 'portfolio_size',
-                                       'tr_period', 'cutoff', 'tot_contribution', 'final port_value',
+backtest_results=pd.DataFrame(columns=['trades', 'momentum_window',
+                                       'minimum_momentum', 'portfolio_size',
+                                       'tr_period', 'cutoff',
+                                       'tot_contribution', 'final portfolio_value',
                                        'cumprod', 'tot_ret', 'drawdown'])
 #backtest 80%
 x=int(0.9*l_close_min)
-df_bt=df.head(x) #backtest dataframe of first x values from total prices 
+df_bt=df.head(x) #backtest dataframe of first x values from total prices
 df_vld=df.tail(x) #validate dataframe of the rest prices like a forward test
 #run all the combinations for all parameter values
 for backtest_days in [100]:
@@ -89,11 +90,15 @@ for backtest_days in [100]:
             for portfolio_size in [5,10,15,20]:
                 for trading_period in [5,10,20]:
                     for cutoff in [0.01,0.05,0.1]:
-                        port_value=10000
+                        portfolio_value=10000
                         backtest_dataset=len(df_bt)-backtest_days
                         lookback_days=momentum_window
                         added_value=0
-                        bt_result=greekstocks.backtest_portfolio(df_bt,backtest_dataset,lookback_days,momentum_window,minimum_momentum,portfolio_size,trading_period,cutoff,port_value,added_value)
+                        bt_result=greekstocks.backtest_portfolio(df_bt,backtest_dataset,
+                                                                 lookback_days,momentum_window,
+                                                                 minimum_momentum,portfolio_size,
+                                                                 trading_period,cutoff,
+                                                                 portfolio_value,added_value)
                         backtest_results=backtest_results.append(bt_result, ignore_index=True)
                         print(bt_result)
                         #plt.plot(plotted_portval)
@@ -105,7 +110,7 @@ print(best_backtest_result)
 
 
 #validate the best of the best portfolio
-port_value=10000
+portfolio_value=10000
 momentum_window = int(best_backtest_result.loc[0,'momentum_window'])
 minimum_momentum = int(best_backtest_result.loc[0,'minimum_momentum'])
 portfolio_size=int(best_backtest_result.loc[0,'portfolio_size'])
@@ -114,7 +119,11 @@ trading_period=int(best_backtest_result.loc[0,'tr_period'])
 validation_dataset=len(df_vld)-backtest_days
 lookback_days=momentum_window
 added_value=0
-bt_result=greekstocks.backtest_portfolio2(df_vld,validation_dataset,lookback_days,momentum_window,minimum_momentum,portfolio_size,trading_period,cutoff,port_value,added_value)
+bt_result=greekstocks.backtest_portfolio2(df_vld,validation_dataset,
+                                          lookback_days,momentum_window,
+                                          minimum_momentum,portfolio_size,
+                                          trading_period,cutoff,
+                                          portfolio_value,added_value)
 print(bt_result)
 
 
@@ -128,8 +137,8 @@ for symbol in df_old['stock'][:-1].values.tolist():
 new_price.append(cash)
 df_old['new_prices']=new_price
 df_old['new_value']=df_old['new_prices']*df_old['shares']
-port_value=0.9*(cash+df_old['new_value'].sum())
-#port_value=2200
+portfolio_value=0.9*(cash+df_old['new_value'].sum())
+#portfolio_value=2200
 df_tr=close_data.tail(momentum_window)
 df_m=pd.DataFrame()
 m_s=[]
@@ -147,7 +156,7 @@ df_m=df_m[(df_m['momentum']>minimum_momentum-0.5*dev)&(df_m['momentum']<minimum_
 universe = df_m['stock'].tolist()
 print(universe)
 # Create a df with just the stocks from the universe
-df_buy= greekstocks.get_portfolio(universe, df_tr, port_value, cutoff, df_m)[0]
+df_buy= greekstocks.get_portfolio(universe, df_tr, portfolio_value, cutoff, df_m)[0]
 df_buy=df_buy.reset_index()
 print(df_buy)
 print(df_buy['value'].sum())
