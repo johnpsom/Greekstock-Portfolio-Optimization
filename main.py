@@ -142,7 +142,7 @@ df_old['new_prices'] = new_price
 df_old['new_value'] = df_old['new_prices']*df_old['shares']
 portfolio_value = 0.9*(cash+df_old['new_value'].sum())
 # portfolio_value=2200
-df_tr = close_data.tail(momentum_window)
+df_tr = df.tail(momentum_window)
 df_m = pd.DataFrame()
 m_s = []
 st = []
@@ -163,8 +163,14 @@ print(universe)
 df_buy = greekstocks.get_portfolio(
     universe, df_tr, portfolio_value, cutoff, df_m)[0]
 df_buy = df_buy.reset_index()
+old_cash = df_buy.loc[df_buy.stock == 'CASH', 'value'].values[0]
+new_cash = old_cash+(df_old['new_value'].sum()-df_buy['value'].sum())
+df_buy.loc[df_buy.stock == 'CASH', 'value'] = new_cash
+# here you should add the diff of cash to df_buy CASH and then save portfolio
+print(df_old)
+print(' ')
 print(df_buy)
-print(df_buy['value'].sum())
-
+print(df_old['new_value'].sum(), df_buy['value'].sum())
+print('To rebalance your old portfolio to the new you should')
 # rebalance with old portfolio
 greekstocks.rebalance_portfolio(df_old, df_buy)

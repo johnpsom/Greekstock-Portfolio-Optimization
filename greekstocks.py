@@ -310,6 +310,11 @@ def backtest_portfolio(prices_df, bt_dataset=800, lookback_days=700, momentum_wi
           'cumprod': s[-1:][0].values[0],
           'tot_ret': total_ret,
           'drawdown': s.diff().min()[0]}
+    plt.plot(plotted_portval)
+    plt.title('Portfolio Value history')
+    plt.xlabel('Trades')
+    plt.ylabel('Portfolio Value')
+    plt.show()
     return rs
 
 
@@ -426,8 +431,7 @@ def backtest_portfolio2(prices_df, bt_dataset=800, lookback_days=700, momentum_w
 
 def rebalance_portfolio(df_old, df_new):
     '''rebalance old with new proposed portfolio'''
-    old_port_value = df_old['value'].sum()
-    new_port_value = old_port_value
+
     new_stocks = list(df_old.stock[:-1]) + \
         list(set(df_new.stock[:-1])-set(df_old.stock))
     for stock in new_stocks:
@@ -435,21 +439,21 @@ def rebalance_portfolio(df_old, df_new):
         if (stock in list(df_old.stock)) and (stock not in list(df_new.stock[:-1])):
             # close positions
             if df_old.loc[df_old.stock == stock, 'shares'].values[0] > 0:
-                print('κλείσιμο θέσης στην μετοχ΄ή ', stock)
-                new_port_value = new_port_value + \
-                    df_old.loc[df_old.stock == stock, 'shares'].values[0]
+                print('Close position on ', stock)
+
             if df_old.loc[df_old.stock == stock, 'shares'].values[0] < 0:
-                print('κλείσιμο θέσης στην μετοχ΄ή ', stock)
-                new_port_value = new_port_value + \
-                    df_old.loc[df_old.stock == stock, 'shares'].values[0]
+                print('Close position on ', stock)
+
         # open new positions that only appear in new portfolio
         if stock in list(set(df_new.stock[:-1])-set(df_old.loc[:, 'stock'])):
             if df_new.loc[df_new.stock == stock, 'shares'].values[0] > 0:
                 print('Buy ', df_new.loc[df_new.stock == stock, 'shares'].values[0], ' shares of ',
-                      stock, ' to open long position')
+                      stock, ' to open new long position')
+
             if df_new.loc[df_new.stock == stock, 'shares'].values[0] < 0:
                 print('Sell ', df_new.loc[df_new.stock == stock, 'shares'].values[0], ' shares of ',
-                      stock, ' to open short position')
+                      stock, ' to open new short position')
+
         # modify positions of stocks that appear in new and old portfolio
         if (stock in list(df_old.stock)) and (stock in list(df_new.stock[:-1])):
             # change positions
@@ -457,9 +461,12 @@ def rebalance_portfolio(df_old, df_new):
                 new_shares = df_new.loc[df_new.stock == stock, 'shares'].values[0] - \
                     df_old.loc[df_old.stock == stock, 'shares'].values[0]
                 if new_shares >= 0:
-                    print('Buy another ', round(new_shares, 4), ' of ', stock)
+                    print('Increase position of', round(
+                        new_shares, 4), ' shares on ', stock)
+
                 if new_shares < 0:
-                    print('Sell another ', round(new_shares, 4), ' of ', stock)
+                    print('Reduce position of ', round(
+                        new_shares, 4), ' shares on ', stock)
             if df_new.loc[df_new.stock == stock, 'shares'].values[0] < 0 and df_old.loc[df_old.stock == stock, 'shares'].values[0] < 0:
                 new_shares = df_new.loc[df_new.stock == stock, 'shares'].values[0] - \
                     df_old.loc[df_old.stock == stock, 'shares'].values[0]
@@ -474,4 +481,4 @@ def rebalance_portfolio(df_old, df_new):
                     print('Buy Long', round(new_shares, 4), ' of ', stock)
                 if new_shares < 0:
                     print('Sell Short ', round(new_shares, 4), ' of ', stock)
-    return new_port_value
+    return df_new['value'].sum()
