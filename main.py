@@ -114,7 +114,7 @@ print(best_backtest_result)
 
 
 # validate the best of the best portfolio
-portfolio_value = 10000
+portfolio_value = 5000
 momentum_window = int(best_backtest_result.loc[0, 'momentum_window'])
 minimum_momentum = int(best_backtest_result.loc[0, 'minimum_momentum'])
 portfolio_size = int(best_backtest_result.loc[0, 'portfolio_size'])
@@ -141,7 +141,7 @@ for symbol in df_old['stock'][:-1].values.tolist():
 new_price.append(cash)
 df_old['new_prices'] = new_price
 df_old['new_value'] = df_old['new_prices']*df_old['shares']
-portfolio_value = 0.9*(cash+df_old['new_value'].sum())
+portfolio_value = 0.5*(cash+df_old['new_value'].sum())
 # portfolio_value=2200
 df_tr = df.tail(momentum_window)
 df_m = pd.DataFrame()

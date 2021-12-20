@@ -8,7 +8,7 @@ Created on Wed Dec  8 08:41:36 2021
 tickers_gr = ['AEGN.ATH', 'AETF.ATH', 'ALMY.ATH', 'ALPHA.ATH', 'ANDRO.ATH', 'ANEK.ATH',
               'ASCO.ATH', 'ASTAK.ATH', 'ATEK.ATH', 'ATRUST.ENAX', 'ATTICA.ATH', 'AVAX.ATH',
               'AVE.ATH', 'BELA.ATH', 'BIOKA.ATH', 'BIOSK.ATH', 'BIOT.ATH', 'BRIQ.ATH',
-              'BYTE.ATH', 'CENER.ATH',  'CRETA.ATH', 'DAIOS.ATH', 'DOMIK.ATH', 'DROME.ATH',
+              'BYTE.ATH', 'CENER.ATH', 'DAIOS.ATH', 'DOMIK.ATH', 'DROME.ATH',
               'DUR.ATH', 'EEE.ATH', 'EKTER.ATH', 'ELBE.ATH', 'ELBIO.ATH', 'ELHA.ATH',
               'ELIN.ATH', 'ELLAKTOR.ATH', 'ELPE.ATH', 'ELSTR.ATH', 'ELTON.ATH', 'ENTER.ATH',
               'EPSIL.ATH', 'ETE.ATH', 'EUPIC.ATH', 'EUROB.ATH', 'EVROF.ATH', 'EXAE.ATH',
