@@ -81,17 +81,18 @@ backtest_results = pd.DataFrame(columns=['trades', 'momentum_window',
                                          'cumprod', 'tot_ret', 'drawdown'])
 # backtest on the 90% of our dataset
 x = int(0.9*l_close_min)
-df_bt = df.head(x)  # backtest dataframe of first x values from total prices
+# .head(x)  # backtest dataframe of first x values from total prices
+df_bt = df
 # validate dataframe of the rest prices like a forward test
 df_vld = df.tail(x)
 # run all the combinations for all parameter values
 for backtest_days in [100]:
-    for momentum_window in range(200, 510, 50):
+    for momentum_window in range(100, 510, 50):
         for minimum_momentum in range(90, 210, 30):
             for portfolio_size in [5, 10, 15, 20]:
                 for trading_period in [5, 10, 20]:
                     for cutoff in [0.01, 0.05, 0.1]:
-                        portfolio_value = 10000
+                        portfolio_value = 5000
                         backtest_dataset = len(df_bt)-backtest_days
                         lookback_days = momentum_window
                         added_value = 0
@@ -117,7 +118,7 @@ portfolio_value = 10000
 momentum_window = int(best_backtest_result.loc[0, 'momentum_window'])
 minimum_momentum = int(best_backtest_result.loc[0, 'minimum_momentum'])
 portfolio_size = int(best_backtest_result.loc[0, 'portfolio_size'])
-cutoff = int(best_backtest_result.loc[0, 'cutoff'])
+cutoff = (best_backtest_result.loc[0, 'cutoff'])
 trading_period = int(best_backtest_result.loc[0, 'tr_period'])
 validation_dataset = len(df_vld)-backtest_days
 lookback_days = momentum_window
