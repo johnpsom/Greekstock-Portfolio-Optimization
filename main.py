@@ -63,7 +63,7 @@ l_close_min = l_close['len_prices'].min()
 
 
 # Declare Constants
-portfolio_value = 10000
+portfolio_value = 5000
 new_portfolio_value = 0
 df = close_data
 #momentum_window = v
