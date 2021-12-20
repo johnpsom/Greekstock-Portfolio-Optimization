@@ -120,9 +120,9 @@ minimum_momentum = int(best_backtest_result.loc[0, 'minimum_momentum'])
 portfolio_size = int(best_backtest_result.loc[0, 'portfolio_size'])
 cutoff = (best_backtest_result.loc[0, 'cutoff'])
 trading_period = int(best_backtest_result.loc[0, 'tr_period'])
-validation_dataset = len(df_vld)-backtest_days
+validation_dataset = l_close_min-backtest_days
 lookback_days = momentum_window
-added_value = 0
+added_value = 10
 bt_result = greekstocks.backtest_portfolio2(df_vld, validation_dataset,
                                             lookback_days, momentum_window,
                                             minimum_momentum, portfolio_size,
