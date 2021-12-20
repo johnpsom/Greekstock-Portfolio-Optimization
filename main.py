@@ -93,7 +93,7 @@ for backtest_days in [100]:
                 for trading_period in [5, 10, 20]:
                     for cutoff in [0.01, 0.05, 0.1]:
                         portfolio_value = 5000
-                        backtest_dataset = len(df_bt)-backtest_days
+                        backtest_dataset = l_close_min-backtest_days
                         lookback_days = momentum_window
                         added_value = 0
                         bt_result = greekstocks.backtest_portfolio(df_bt, backtest_dataset,
